@@ -32,7 +32,7 @@ CREATE TABLE verified_artists (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE cart_example (    
+CREATE TABLE shoppingCart (    
     user_id INT,
     product_id INT,
     price INT,
@@ -42,7 +42,7 @@ CREATE TABLE cart_example (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
-INSERT INTO cart_example (user_id, product_id, price, quantity) VALUES
+INSERT INTO shoppingCart (user_id, product_id, price, quantity) VALUES
 (2, 1, 9900, 3),
 (1, 3, 5700, 2),
 (2, 2, 8000, 4),
@@ -58,6 +58,23 @@ CREATE TABLE favorites (
     product_id INT,
     FOREIGN KEY (product_id) REFERENCES products(product_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+
+DROP TABLE IF EXISTS categories;
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
+
+
+DROP TABLE IF EXISTS products_categories;
+CREATE TABLE products_categories (
+    product_id INT,
+    category_id INT,
+    PRIMARY KEY (product_id, category_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
 
@@ -131,3 +148,23 @@ INSERT INTO verified_artists (username, description, role, artist_image, user_id
 ('Henri Cartier-Bresson', 'Considerado el padre del fotoperiodismo moderno y fundador de la agencia Magnum Photos.', 'artista', 'https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80', 6),
 ('Cindy Sherman', 'Conocida por sus autorretratos artísticos y su exploración de la identidad y la representación.', 'artista', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80', 7),
 ('Helmut Newton', 'Fotógrafo de moda y retratos conocido por su estilo provocativo y glamuroso.', 'artista', 'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=723&q=80', 8);
+
+
+INSERT INTO categories (name) VALUES ('Ilustraciones');
+INSERT INTO categories (name) VALUES ('Fotografías');
+INSERT INTO categories (name) VALUES ('Fanzines');
+INSERT INTO categories (name) VALUES ('Escritos');
+INSERT INTO categories (name) VALUES ('Collages');
+INSERT INTO categories (name) VALUES ('Pinturas');
+
+INSERT INTO products_categories (product_id, category_id) VALUES (1, 2);
+INSERT INTO products_categories (product_id, category_id) VALUES (2, 4);
+INSERT INTO products_categories (product_id, category_id) VALUES (5, 5);
+INSERT INTO products_categories (product_id, category_id) VALUES (8, 1);
+INSERT INTO products_categories (product_id, category_id) VALUES (16, 2);
+
+-- Buscar productos en la categoría "Fotografias"
+SELECT p.*
+FROM products p
+JOIN products_categories pc ON p.product_id = pc.product_id
+WHERE pc.category_id = 2;
