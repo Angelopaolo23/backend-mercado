@@ -32,7 +32,7 @@ CREATE TABLE verified_artists (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE shoppingCart (    
+CREATE TABLE shopping_cart (    
     user_id INT,
     product_id INT,
     price INT,
@@ -42,7 +42,7 @@ CREATE TABLE shoppingCart (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
-INSERT INTO shoppingCart (user_id, product_id, price, quantity) VALUES
+INSERT INTO shopping_cart (user_id, product_id, price, quantity) VALUES
 (2, 1, 9900, 3),
 (1, 3, 5700, 2),
 (2, 2, 8000, 4),
@@ -73,9 +73,26 @@ CREATE TABLE products_categories (
     product_id INT,
     category_id INT,
     PRIMARY KEY (product_id, category_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
+
+
+CREATE TABLE comments (
+    comment_id serial PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
+    product_id INT REFERENCES products(product_id),
+    content TEXT,
+    comment_date TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO comments (user_id, product_id, content) VALUES  (3, 6, 'que linda fotografia');
+INSERT INTO comments (user_id, product_id, content) VALUES  (8, 3, 'bonito atardecer');
+INSERT INTO comments (user_id, product_id, content) VALUES  (11, 4, 'comentario sin imaginacion');
+INSERT INTO comments (user_id, product_id, content) VALUES  (2, 3, 'no me gusta del todo');
+INSERT INTO comments (user_id, product_id, content) VALUES  (6, 3, 'muy barato por la calidad de la foto');
+
+
 
 
 INSERT INTO users (username, email, password) VALUES
@@ -167,4 +184,4 @@ INSERT INTO products_categories (product_id, category_id) VALUES (16, 2);
 SELECT p.*
 FROM products p
 JOIN products_categories pc ON p.product_id = pc.product_id
-WHERE pc.category_id = 2;
+WHERE pc.category_id = 3;
