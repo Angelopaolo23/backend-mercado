@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(25),
-    email VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
     password VARCHAR(255)
 );
 
@@ -54,8 +54,8 @@ INSERT INTO shopping_cart (user_id, product_id, price, quantity) VALUES
 DROP TABLE IF EXISTS favorites;
 CREATE TABLE favorites (
     favorite_id SERIAL PRIMARY KEY,
-    user_id INT,
-    product_id INT,
+    user_id INT CHECK (user_id >= 0),
+    product_id INT CHECK (product_id >= 0),
     FOREIGN KEY (product_id) REFERENCES products(product_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
@@ -80,11 +80,24 @@ CREATE TABLE products_categories (
 
 CREATE TABLE comments (
     comment_id serial PRIMARY KEY,
-    user_id INT REFERENCES users(user_id),
-    product_id INT REFERENCES products(product_id),
-    content TEXT,
-    comment_date TIMESTAMPTZ DEFAULT NOW()
+    user_id INT,
+    product_id INT,
+    content VARCHAR(150),
+    comment_date TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 );
+
+CREATE TABLE product_rating (
+    rating_id serial PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    rating INT CHECK (rating >= 1 AND rating <= 5),
+    rating_date TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
+
 
 INSERT INTO comments (user_id, product_id, content) VALUES  (3, 6, 'que linda fotografia');
 INSERT INTO comments (user_id, product_id, content) VALUES  (8, 3, 'bonito atardecer');

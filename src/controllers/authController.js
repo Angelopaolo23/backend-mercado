@@ -8,12 +8,17 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(originalPassword, 10);
         req.body.password = hashedPassword;
         // const {username, email, password} = req.body;
-        const user = await createUser(req.body);
-        if (!user) {
-        throw new Error('No se pudo crear el usuario');
+        if ( await getUserByEmail(req.body.email)){
+            return res.status(400).json({ error: 'Ya existe una cuenta con este email' });
+        } else {
+            const user = await createUser(req.body);
+            if (!user) {
+            throw new Error('No se pudo crear el usuario');
+            }
+            //RESPUESTA PARA DESPLEGAR NOMBRE DE USUARIO?
+            res.status(201).json(user);
         }
-        //RESPUESTA PARA DESPLEGAR NOMBRE DE USUARIO?
-        res.status(201).json(user);
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -23,7 +28,8 @@ const login = async (req, res) => {
         const { email, password } = req.body;
         const user = await getUserByEmail(email);
         if (!user) {
-            throw new Error('Usuario no encontrado');
+            return res.status(400).json({ error: 'Usuario no encontrado' });
+            //throw new Error('Usuario no encontrado');
         }
         const hashedPassword = user.password;
         const match = await bcrypt.compare(password, hashedPassword);
@@ -38,6 +44,7 @@ const login = async (req, res) => {
             .status(200)
             .json(token);
         } else {
+            return res.status(400).json({ error: 'Usuario no encontrado' });
             throw new Error('Usuario o contraseña incorrectas');
         }
     } catch (error) {

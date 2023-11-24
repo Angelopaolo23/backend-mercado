@@ -1,4 +1,4 @@
-const { getProducts, getProductById, createProduct, addCategory, updateProduct, deleteProduct} = require('../models/products');
+const { getProducts, getProductById, createProduct, addCategory, updateProduct, deleteProduct, ratingProduct, getRating, updateRating, updateCategory} = require('../models/products');
 
 const all = async (req, res) => {
     try {
@@ -26,10 +26,11 @@ const create = async (req, res) => {
         res.status(500).json({error: error.message});
     }
 };
-//HAY QUE AGREGAR LA PARTE DE ACTUALIZAR LAS CATEGORIAS
 const update = async (req, res) => {
     try {
+        console.log()
         const product = await updateProduct(req.params.id, req.body);
+        await updateCategory(req.params.id, req.body.category);
         res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -44,4 +45,19 @@ const destroy = async (req, res) => {
     }
 };
 
-module.exports = {all, one, create, update, destroy};
+const rating = async (req, res) => {
+    try {
+        const rate = await getRating(req.body);
+        if (!rate) {
+            const newRate = await ratingProduct(req.body);
+            res.status(201).json(newRate);
+        } else {
+            const updatedRate = await updateRating(req.body);
+            res.status(201).json(updatedRate);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = {all, one, create, update, destroy, rating};

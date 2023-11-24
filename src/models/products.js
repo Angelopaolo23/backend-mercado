@@ -6,7 +6,7 @@ const getProducts = async () => {
             const { rows } = await pool.query(query);
             return rows;
         } catch (error) {
-        throw new Error(error);
+            throw new Error(error);
         }
 };
 const getProductById = async (id) => {
@@ -59,6 +59,18 @@ const updateProduct = async (id, product) => {
         throw new Error(error);
     }
 };
+const updateCategory = async (id, category) => {
+    const query =
+      'UPDATE products_categories SET category_id = $1 WHERE product_id = $2 RETURNING *';
+    try {
+        const response = await pool.query(query, [
+            category,
+            id]);
+        return response.rows[0];
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const deleteProduct = async (id) => {
     const query = 'DELETE FROM products WHERE product_id = $1';
     try {
@@ -69,4 +81,44 @@ const deleteProduct = async (id) => {
     }
 };
 
-module.exports = {getProducts, getProductById, createProduct, addCategory, updateProduct, deleteProduct};
+const ratingProduct = async (info) => {
+    const query = 'INSERT INTO product_rating (user_id, product_id, rating) VALUES ($1, $2, $3) RETURNING *';
+    try {
+        const response = await pool.query(query,[
+            info.user_id,
+            info.product_id,
+            info.rating
+        ]);
+        return response.rows;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+const updateRating = async (info) => {
+    const query =
+    'UPDATE product_rating SET rating = $1 WHERE user_id = $2 AND product_id = $3';
+    try {
+        const response = await pool.query(query, [
+            info.rating,
+            info.user_id,
+            info.product_id
+        ])
+        return response.rows;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+const getRating = async (info) => {
+    const query = 'SELECT * FROM product_rating WHERE user_id = $1 AND product_id = $2';
+        try {
+            const response = await pool.query(query, [
+                info.user_id,
+                info.product_id
+            ]);
+            return response.rows[0];
+        } catch (error) {
+            throw new Error(error);
+        }
+};
+
+module.exports = {getProducts, getProductById, createProduct, addCategory, updateProduct, deleteProduct, ratingProduct, updateRating, updateCategory, getRating};
