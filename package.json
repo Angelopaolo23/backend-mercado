@@ -1,11 +1,11 @@
 {
-  "name": "backend",
+  "name": "backend-art",
   "version": "1.0.0",
   "description": "Backend de proyecto de marketplace",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "AngeloB.",
   "license": "ISC",
