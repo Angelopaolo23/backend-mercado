@@ -110,14 +110,14 @@ INSERT INTO comments (user_id, product_id, content) VALUES  (6, 3, 'muy barato p
 
 
 INSERT INTO users (username, email, password) VALUES
-('Ansel Adams', 'anseladams@example.com', 'AnselAdams1'),
-('Dorothea Lange', 'dorothealange@example.com', 'DorotheaLange1'),
-('Steve McCurry', 'stevemcCurry@example.com', 'SteveMcCurry1'),
-('Annie Leibovitz', 'annieleibovitz@example.com', 'AnnieLeibovitz1'),
-('Sebastião Salgado', 'sebastiãosalgado@example.com', 'SebastiãoSalgado1'),
-('Henri Cartier-Bresson', 'henricartier-bresson@example.com', 'HenriCartier-Bresson1'),
-('Cindy Sherman', 'cindysherman@example.com', 'CindySherman1'),
-('Helmut Newton', 'helmutnewton@example.com', 'HelmutNewton1'),
+('AnselAdams', 'anseladams@example.com', 'AnselAdams1'),
+('DorotheaLange', 'dorothealange@example.com', 'DorotheaLange1'),
+('SteveMcCurry', 'stevemcCurry@example.com', 'SteveMcCurry1'),
+('AnnieLeibovitz', 'annieleibovitz@example.com', 'AnnieLeibovitz1'),
+('SebastiaoSalgado', 'sebastiãosalgado@example.com', 'SebastiaoSalgado1'),
+('HenriCartierBresson', 'henricartier-bresson@example.com', 'HenriCartierBresson1'),
+('CindySherman', 'cindysherman@example.com', 'CindySherman1'),
+('HelmutNewton', 'helmutnewton@example.com', 'HelmutNewton1'),
 ('AlejandroLopez', 'alejandrolopez@example.com', 'AlejandroLopez1'),
 ('ChloeMartinez', 'chloemartinez@example.com', 'ChloeMartinez1'),
 ('ManuelGutierrez', 'manuelgutierrez@example.com', 'ManuelGutierrez1'),
@@ -183,10 +183,10 @@ INSERT INTO verified_artists (username, description, role, artist_image, user_id
 
 INSERT INTO categories (name) VALUES ('Ilustraciones');
 INSERT INTO categories (name) VALUES ('Fotografías');
-INSERT INTO categories (name) VALUES ('Fanzines');
-INSERT INTO categories (name) VALUES ('Escritos');
 INSERT INTO categories (name) VALUES ('Collages');
 INSERT INTO categories (name) VALUES ('Pinturas');
+INSERT INTO categories (name) VALUES ('Fanzines');
+INSERT INTO categories (name) VALUES ('Escritos');
 
 INSERT INTO products_categories (product_id, category_id) VALUES (1, 2);
 INSERT INTO products_categories (product_id, category_id) VALUES (2, 4);
