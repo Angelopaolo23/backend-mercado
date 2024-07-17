@@ -5,18 +5,18 @@ CREATE DATABASE artMarketplace;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    username VARCHAR(25),
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255)
+    username TEXT CHECK (LENGTH(descripcion) <= 30),
+    email TEXT UNIQUE,
+    password TEXT
 );
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
-    title VARCHAR (255),
+    title TEXT,
     description TEXT,
     price INT,
-    url_image VARCHAR(255),
+    url_image TEXT,
     seller_id INT,
     FOREIGN KEY (seller_id) REFERENCES users(user_id)
 );
@@ -24,31 +24,23 @@ CREATE TABLE products (
 DROP TABLE IF EXISTS verified_artists;
 CREATE TABLE verified_artists (
     artist_id SERIAL PRIMARY KEY,
-    username VARCHAR(25),
-    description VARCHAR(255),
-    role VARCHAR(25),
-    artist_image VARCHAR(255),
+    username TEXT,
+    description TEXT,
+    role TEXT,
+    artist_image TEXT,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE shopping_cart (    
-    user_id INT,
-    product_id INT,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
     price INT,
     quantity INT DEFAULT 1,
     paid boolean DEFAULT false,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
-
-INSERT INTO shopping_cart (user_id, product_id, price, quantity) VALUES
-(2, 1, 9900, 3),
-(1, 3, 5700, 2),
-(2, 2, 8000, 4),
-(1, 1, 9900, 1),
-(3, 1, 9900, 2),
-(2, 4, 11900, 4);
 
 
 DROP TABLE IF EXISTS favorites;
@@ -64,7 +56,7 @@ CREATE TABLE favorites (
 DROP TABLE IF EXISTS categories;
 CREATE TABLE categories (
     category_id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
+    name TEXT UNIQUE
 );
 
 
@@ -82,7 +74,7 @@ CREATE TABLE comments (
     comment_id serial PRIMARY KEY,
     user_id INT,
     product_id INT,
-    content VARCHAR(150),
+    content TEXT,
     comment_date TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
@@ -97,6 +89,15 @@ CREATE TABLE product_rating (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 );
+
+
+INSERT INTO shopping_cart (user_id, product_id, price, quantity) VALUES
+(2, 1, 9900, 3),
+(1, 3, 5700, 2),
+(2, 2, 8000, 4),
+(1, 1, 9900, 1),
+(3, 1, 9900, 2),
+(2, 4, 11900, 4);
 
 
 INSERT INTO comments (user_id, product_id, content) VALUES  (3, 6, 'que linda fotografia');
