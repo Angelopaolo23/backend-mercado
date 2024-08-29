@@ -14,7 +14,7 @@ const register = async (req, res) => {
     req.body.password = hashedPassword;
     if (await getUserByEmail(req.body.email)) {
       return res
-        .status(400)
+        .status(409)
         .json({ error: "Ya existe una cuenta con este email" });
     } else {
       const user = await createUser(req.body);
