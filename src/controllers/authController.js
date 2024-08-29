@@ -33,7 +33,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
     if (!user) {
-      return res.status(400).json({ error: "Usuario no encontrado" });
+      return res.status(404).json({ error: "Usuario no encontrado" });
     }
     const hashedPassword = user.password;
     const match = await bcrypt.compare(password, hashedPassword);
@@ -47,7 +47,7 @@ const login = async (req, res) => {
       res.status(200).json(token);
     } else {
       return res
-        .status(400)
+        .status(401)
         .json({ error: "Usuario o contraseña incorrectas" });
     }
   } catch (error) {
