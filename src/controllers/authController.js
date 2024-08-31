@@ -22,7 +22,7 @@ const register = async (req, res) => {
       throw new Error("No se pudo crear el usuario");
     }
     const token = jwt.sign(
-      { email: user.email, userId: user_id },
+      { email: user.email, userId: user.user_id },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
@@ -46,7 +46,7 @@ const login = async (req, res) => {
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
     const token = jwt.sign(
-      { email: user.email, user_id: user.user_id },
+      { email: user.email, userId: user.user_id },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
