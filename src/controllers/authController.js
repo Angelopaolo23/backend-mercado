@@ -9,23 +9,28 @@ const {
 
 const register = async (req, res) => {
   try {
-    const originalPassword = req.body.password;
-    const hashedPassword = await bcrypt.hash(originalPassword, 10);
-    req.body.password = hashedPassword;
-    if (await getUserByEmail(req.body.email)) {
+    const { username, email, password: originalPassword } = req.body;
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
       return res
         .status(409)
         .json({ error: "Ya existe una cuenta con este email" });
-    } else {
-      const user = await createUser(req.body);
-      if (!user) {
-        throw new Error("No se pudo crear el usuario");
-      }
-      //RESPUESTA PARA DESPLEGAR NOMBRE DE USUARIO?
-      res.status(201).json(user);
     }
+    const hashedPassword = await bcrypt.hash(originalPassword, 10);
+    const user = await createUser(username, email, hashedPassword);
+    if (!user) {
+      throw new Error("No se pudo crear el usuario");
+    }
+    const token = jwt.sign(
+      { email: user.email, userId: user_id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(201).json({ token, user: userWithoutPassword });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error en el registro:", error);
+    res.status(500).json({ error: "Error en el registro de usuario" });
   }
 };
 const login = async (req, res) => {
@@ -33,25 +38,23 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      return res.status(401).json({ error: "Credenciales inválidas" });
     }
     const hashedPassword = user.password;
     const match = await bcrypt.compare(password, hashedPassword);
-
-    if (match) {
-      const token = jwt.sign(
-        { email: user.email, user_id: user.user_id },
-        process.env.JWT_SECRET
-      );
-      //ES NECESARIA UNA RESPUESTA PARA DESPLEGAR EL NOMBRE DEL USUARIO?
-      res.status(200).json(token);
-    } else {
-      return res
-        .status(401)
-        .json({ error: "Usuario o contraseña incorrectas" });
+    if (!match) {
+      return res.status(401).json({ error: "Credenciales inválidas" });
     }
+    const token = jwt.sign(
+      { email: user.email, user_id: user.user_id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(200).json({ token, user: userWithoutPassword });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error en el login:", error);
+    res.status(500).json({ error: "Error en el proceso de inicio de sesión" });
   }
 };
 
