@@ -26,8 +26,8 @@ const register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
-    const { password: _, ...userWithoutPassword } = user;
-    res.status(201).json({ token, user: userWithoutPassword });
+    const { password: _, email: _, ...userWithoutPasswordAndEmail } = user;
+    res.status(201).json({ token, user: userWithoutPasswordAndEmail });
   } catch (error) {
     console.error("Error en el registro:", error);
     res.status(500).json({ error: "Error en el registro de usuario" });
@@ -50,8 +50,8 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
-    const { password: _, ...userWithoutPassword } = user;
-    res.status(200).json({ token, user: userWithoutPassword });
+    const { password: _, email: _, ...userWithoutPasswordAndEmail } = user;
+    res.status(200).json({ token, user: userWithoutPasswordAndEmail });
   } catch (error) {
     console.error("Error en el login:", error);
     res.status(500).json({ error: "Error en el proceso de inicio de sesión" });
