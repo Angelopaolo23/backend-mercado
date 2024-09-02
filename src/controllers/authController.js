@@ -26,13 +26,11 @@ const register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
-    const {
-      password: _,
-      email: _,
-      created_at: _,
-      updated_at: _,
-      ...userInfoLogin
-    } = user;
+    const userInfoLogin = {
+      username: user.username,
+      user_id: user.user_id,
+      photo: user.photo,
+    };
     res.status(201).json({ token, user: userInfoLogin });
   } catch (error) {
     console.error("Error en el registro:", error);
@@ -56,13 +54,11 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
-    const {
-      password: _,
-      email: _,
-      created_at: _,
-      updated_at: _,
-      ...userInfoLogin
-    } = user;
+    const userInfoLogin = {
+      username: user.username,
+      user_id: user.user_id,
+      photo: user.photo,
+    };
     res.status(200).json({ token, user: userInfoLogin });
   } catch (error) {
     console.error("Error en el login:", error);
