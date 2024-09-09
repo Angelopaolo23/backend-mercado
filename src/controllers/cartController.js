@@ -7,6 +7,7 @@ const {
   getCarts,
   addOneOrMore,
   deleteProducts,
+  removeProduct,
 } = require("../models/cart");
 
 const getAll = async (req, res) => {
@@ -61,5 +62,17 @@ const sustract = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const removeOne = async (req, res) => {
+  try {
+    const product = await getProductByID(req.body);
+    if (product) {
+      const removingProduct = await removeProduct(req.body);
+      res.status(200).json(removingProduct);
+    }
+  } catch (error) {
+    console.error("Error al eliminar producto del carro:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-module.exports = { getAll, oneCart, add, sustract };
+module.exports = { getAll, oneCart, add, sustract, removeOne };

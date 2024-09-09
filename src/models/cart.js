@@ -99,6 +99,19 @@ const deleteProducts = async (user_id) => {
     throw new Error(error);
   }
 };
+const removeProduct = async (product) => {
+  const query =
+    "DELETE FROM shopping_cart WHERE user_id = $1 AND product_id = $2 RETURNING *";
+  try {
+    const response = await pool.query(query, [
+      product.user_id,
+      product.product_id,
+    ]);
+    return response.rows;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   getProductByID,
@@ -109,4 +122,5 @@ module.exports = {
   getCarts,
   addOneOrMore,
   deleteProducts,
+  removeProduct,
 };

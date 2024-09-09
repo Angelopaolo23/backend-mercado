@@ -50,7 +50,7 @@ CREATE TABLE shopping_cart (
     user_id INT,
     product_id INT,
     price INT NOT NULL CHECK (price >= 0),
-    quantity INT DEFAULT 1 CHECK (quantity > 0),
+    quantity INT DEFAULT 1,
     paid BOOLEAN DEFAULT false,
     added_date TIMESTAMPTZ DEFAULT NOW(),
     PRIMARY KEY (user_id, product_id),
