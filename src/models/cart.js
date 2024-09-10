@@ -14,6 +14,7 @@ const getProductByID = async (product) => {
   }
 };
 const getCartInfo = async (id) => {
+  //NECESITO EL NOMBRE DEL ARTISTA (username) DE LA TABLA PRODUCTS y USER (products.seller_id = users.user_id), ADEMAS NECESITO LAS CATEGORIAS DEL PRODUCTO
   const query =
     "SELECT shopping_cart.product_id, products.title, shopping_cart.quantity, shopping_cart.price, products.url_image FROM users INNER JOIN shopping_cart ON users.user_id = shopping_cart.user_id INNER JOIN products ON shopping_cart.product_id = products.product_id WHERE shopping_cart.user_id = $1";
   try {
@@ -101,7 +102,7 @@ const deleteProducts = async (user_id) => {
 };
 const removeProduct = async (product) => {
   const query =
-    "DELETE FROM shopping_cart WHERE user_id = $1 AND product_id = $2 RETURNING *";
+    "DELETE FROM shopping_cart WHERE user_id = $1 AND product_id = $2";
   try {
     const response = await pool.query(query, [
       product.user_id,
