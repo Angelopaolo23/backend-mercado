@@ -2,7 +2,7 @@ const pool = require("../config/pool");
 
 const getFavorites = async (user_id) => {
   const query =
-    "SELECT p.*, u.username FROM products p INNER JOIN favorites f ON p.product_id = f.product_id INNER JOIN users u ON p.seller_id = u.user_id WHERE f.user_id = 1$";
+    "SELECT p.*, u.username FROM products p INNER JOIN favorites f ON p.product_id = f.product_id INNER JOIN users u ON p.seller_id = u.user_id WHERE f.user_id = $1";
   try {
     const { rows } = await pool.query(query, [user_id]);
     return rows;
