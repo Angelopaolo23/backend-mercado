@@ -10,6 +10,16 @@ const getFavorites = async (user_id) => {
     throw new Error(error);
   }
 };
+const getFavoriteById = async (user_id, product_id) => {
+  const query =
+    "SELECT * FROM favorites WHERE user_id = $1 AND product_id = $2";
+  try {
+    const response = await pool.query(query, [user_id, product_id]);
+    return response.rows[0];
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const newFavorite = async (product_id, user_id) => {
   const query =
     "INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *";
@@ -30,4 +40,4 @@ const deleteFavorite = async (product_id, user_id) => {
   }
 };
 
-module.exports = { getFavorites, newFavorite, deleteFavorite };
+module.exports = { getFavorites, newFavorite, deleteFavorite, getFavoriteById };
