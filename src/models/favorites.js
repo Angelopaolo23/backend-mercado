@@ -20,7 +20,7 @@ const getFavoriteById = async (user_id, product_id) => {
     throw new Error(error);
   }
 };
-const newFavorite = async (product_id, user_id) => {
+const newFavorite = async (user_id, product_id) => {
   const query =
     "INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) RETURNING *";
   try {
@@ -30,7 +30,7 @@ const newFavorite = async (product_id, user_id) => {
     throw new Error(error);
   }
 };
-const deleteFavorite = async (product_id, user_id) => {
+const deleteFavorite = async (user_id, product_id) => {
   const query = "DELETE FROM favorites WHERE user_id = $1 AND product_id = $2";
   try {
     const response = await pool.query(query, [user_id, product_id]);

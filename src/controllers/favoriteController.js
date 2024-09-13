@@ -17,7 +17,7 @@ const all = async (req, res) => {
 const create = async (req, res) => {
   try {
     const existingFavorite = await getFavoriteById(
-      req.params.user_id,
+      req.params.id,
       req.body.product_id
     );
     if (existingFavorite) {
@@ -25,7 +25,7 @@ const create = async (req, res) => {
         .status(409)
         .json({ error: "Ya existe un favorito con este ID" });
     }
-    const favorite = await newFavorite(req.body.product_id, req.params.id);
+    const favorite = await newFavorite(req.params.id, req.body.product_id);
     res.status(201).json(favorite);
   } catch (error) {
     console.error("Error al crear un favorito:", error);
@@ -35,11 +35,11 @@ const create = async (req, res) => {
 const destroy = async (req, res) => {
   try {
     const existingFavorite = await getFavoriteById(
-      req.params.user_id,
+      req.params.id,
       req.body.product_id
     );
     if (existingFavorite) {
-      const favorite = await deleteFavorite(req.body.product_id, req.params.id);
+      const favorite = await deleteFavorite(req.params.id, req.body.product_id);
       res.status(200).json(favorite);
     }
   } catch (error) {
