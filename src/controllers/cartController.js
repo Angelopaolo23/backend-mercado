@@ -5,7 +5,6 @@ const {
   addOne,
   sustractOne,
   getCarts,
-  addOneOrMore,
   deleteProducts,
   removeProduct,
 } = require("../models/cart");
@@ -13,7 +12,7 @@ const {
 const getAll = async (req, res) => {
   try {
     const allCarts = await getCarts();
-    res.json(allCarts);
+    res.status(200).json(allCarts);
   } catch (error) {
     console.error("Error al obtener todos los carros:", error);
     res.status(500).json({ error: error.message });

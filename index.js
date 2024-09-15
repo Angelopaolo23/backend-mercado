@@ -8,6 +8,7 @@ const authRoutes = require("./src/routes/authRoutes");
 const cartRoutes = require("./src/routes/cartRoutes");
 const commentRoutes = require("./src/routes/commentRoutes");
 const favoriteRoutes = require("./src/routes/favoriteRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
 const app = express();
 
 app.use(cors());
@@ -28,5 +29,6 @@ app.use("/auth", authRoutes);
 app.use("/cart", cartRoutes);
 app.use("/comments", commentRoutes);
 app.use("/favorites", favoriteRoutes);
+app.use("/orders", orderRoutes);
 
 module.exports = app;

@@ -53,21 +53,6 @@ const addOne = async (product) => {
     throw new Error(error);
   }
 };
-//REVISAR BIEN SI NECESITAS ESTE
-const addOneOrMore = async (product, addedQuantity) => {
-  const query =
-    "UPDATE shopping_cart SET quantity = quantity + $1 WHERE user_id = $2 AND product_id = $3 RETURNING *";
-  try {
-    const response = await pool.query(query, [
-      addedQuantity,
-      product.user_id,
-      product.product_id,
-    ]);
-    return response.rows;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 const sustractOne = async (product) => {
   const query =
     "UPDATE shopping_cart SET quantity = quantity - 1 WHERE user_id = $1 AND product_id = $2 RETURNING *";
@@ -121,7 +106,6 @@ module.exports = {
   addOne,
   sustractOne,
   getCarts,
-  addOneOrMore,
   deleteProducts,
   removeProduct,
 };
