@@ -67,9 +67,12 @@ const removeOne = async (req, res) => {
     const product = await getProductByID(req.body);
     if (product) {
       const removingProduct = await removeProduct(req.body);
-      res
-        .status(200)
-        .json("Producto removido exitosamente del carro:", removingProduct);
+      res.status(200).json({
+        message: "Producto removido exitosamente del carro",
+        product: removingProduct,
+      });
+    } else {
+      res.status(404).json({ message: "Producto no encontrado" });
     }
   } catch (error) {
     console.error("Error al eliminar producto del carro:", error);

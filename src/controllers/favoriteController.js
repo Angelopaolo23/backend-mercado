@@ -39,8 +39,10 @@ const destroy = async (req, res) => {
       req.body.product_id
     );
     if (existingFavorite) {
-      const favorite = await deleteFavorite(req.params.id, req.body.product_id);
-      res.status(200).json(favorite);
+      await deleteFavorite(req.params.id, req.body.product_id);
+      res
+        .status(200)
+        .json({ message: "Obra removida de favoritos exitosamente." });
     }
   } catch (error) {
     console.error("Error al remover la obra de favoritos:", error);
