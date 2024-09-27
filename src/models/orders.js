@@ -40,7 +40,7 @@ const getAllOrdersByID = async (user_id) => {
 };
 
 const addingNewOrder = async (user_id) => {
-  const query = "INSERT INTO orders (user_id) VALUES $1 RETURNING *";
+  const query = "INSERT INTO orders (user_id) VALUES ($1) RETURNING *";
   try {
     const response = await pool.query(query, [user_id]);
     return response.rows[0];
