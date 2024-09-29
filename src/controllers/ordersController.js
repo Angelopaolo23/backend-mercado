@@ -1,3 +1,4 @@
+import { clearCartAfterCheckout } from "../controllers/cartController";
 const {
   getAllOrdersByID,
   addingNewOrder,
@@ -22,6 +23,7 @@ const add = async (req, res) => {
         newOrder.order_id,
         req.body.items
       );
+      await clearCartAfterCheckout(req.params.id);
       res.status(201).json({ order_id: newOrder.order_id, items: newItems });
     }
   } catch (error) {
