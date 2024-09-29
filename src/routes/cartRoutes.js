@@ -7,5 +7,6 @@ router.get("/:id", cartController.oneCart);
 router.post("", cartController.add);
 router.put("/sustract", cartController.sustract);
 router.delete("", cartController.removeOne);
+router.delete("/:id", cartController.clearCartAfterCheckout);
 
 module.exports = router;

@@ -7,6 +7,8 @@ const {
   getCarts,
   deleteProducts,
   removeProduct,
+  removeCart,
+  existCart,
 } = require("../models/cart");
 
 const getAll = async (req, res) => {
@@ -78,5 +80,28 @@ const removeOne = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const clearCartAfterCheckout = async (req, res) => {
+  try {
+    const cart = await existCart(req.params.id);
+    if (cart) {
+      await removeCart(req.params.id);
+      res.status(200).json({
+        message: "Carro de compras limpiado exitosamente.",
+      });
+    } else {
+      res.status(404).json({ message: "El usuario no tiene ningún carrito." });
+    }
+  } catch (error) {
+    console.error("Error al limpiar el carro:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-module.exports = { getAll, oneCart, add, sustract, removeOne };
+module.exports = {
+  getAll,
+  oneCart,
+  add,
+  sustract,
+  removeOne,
+  clearCartAfterCheckout,
+};

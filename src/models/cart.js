@@ -13,6 +13,15 @@ const getProductByID = async (product) => {
     throw new Error(error);
   }
 };
+const existCart = async (id) => {
+  const query = "SELECT EXISTS(SELECT 1 FROM shopping_cart WHERE user_id = $1)";
+  try {
+    const response = await pool.query(query, [id]);
+    return response.rows[0].exists;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const getCartInfo = async (id) => {
   //NECESITO EL NOMBRE DEL ARTISTA (username) DE LA TABLA PRODUCTS y USER (products.seller_id = users.user_id), ADEMAS NECESITO LAS CATEGORIAS DEL PRODUCTO
   const query =
@@ -99,6 +108,16 @@ const removeProduct = async (product) => {
   }
 };
 
+const removeCart = async (user_id) => {
+  const query = "DELETE FROM shopping_cart WHERE user_id = $1";
+  try {
+    const response = await pool.query(query, [user_id]);
+    return response.rows;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getProductByID,
   getCartInfo,
@@ -108,4 +127,6 @@ module.exports = {
   getCarts,
   deleteProducts,
   removeProduct,
+  removeCart,
+  existCart,
 };
