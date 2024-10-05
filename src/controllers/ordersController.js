@@ -1,4 +1,4 @@
-import pool from "../config/pool";
+const pool = require("../config/pool");
 const { getAllOrdersByID } = require("../models/orders");
 
 const getAll = async (req, res) => {
