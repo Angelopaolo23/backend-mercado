@@ -112,7 +112,7 @@ const removeCart = async (user_id) => {
   const query = "DELETE FROM shopping_cart WHERE user_id = $1";
   try {
     const response = await pool.query(query, [user_id]);
-    return response.rows;
+    return response.rowCount;
   } catch (error) {
     throw new Error(error);
   }

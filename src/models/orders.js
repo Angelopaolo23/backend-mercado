@@ -38,39 +38,39 @@ const getAllOrdersByID = async (user_id) => {
     throw new Error(`Error getting orders: ${error.message}`);
   }
 };
+// SE COMENTA ESTE CODIGO EL 30/09/2024 YA QUE AL REALIZAR EL ordersController "add" CON TRANSACCIONES DE BASES DE DATOS QUEDO INUTILIZADO, NO SE BORRA EN PRIMERA INSTANCIA POR SI SIRVE EN OTRA AREA
+// const addingNewOrder = async (user_id) => {
+//   const query = "INSERT INTO orders (user_id) VALUES ($1) RETURNING *";
+//   try {
+//     const response = await pool.query(query, [user_id]);
+//     return response.rows[0];
+//   } catch (error) {
+//     console.error("Error in addingNewOrder:", error);
+//     throw new Error(`Error adding new order: ${error.message}`);
+//   }
+// };
 
-const addingNewOrder = async (user_id) => {
-  const query = "INSERT INTO orders (user_id) VALUES ($1) RETURNING *";
-  try {
-    const response = await pool.query(query, [user_id]);
-    return response.rows[0];
-  } catch (error) {
-    console.error("Error in addingNewOrder:", error);
-    throw new Error(`Error adding new order: ${error.message}`);
-  }
-};
+// const addingOrderItems = async (order_id, items) => {
+//   const query =
+//     "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *";
 
-const addingOrderItems = async (order_id, items) => {
-  const query =
-    "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *";
+//   try {
+//     const results = await Promise.all(
+//       items.map((item) =>
+//         pool.query(query, [
+//           order_id,
+//           item.product_id,
+//           item.quantity,
+//           item.price,
+//         ])
+//       )
+//     );
 
-  try {
-    const results = await Promise.all(
-      items.map((item) =>
-        pool.query(query, [
-          order_id,
-          item.product_id,
-          item.quantity,
-          item.price,
-        ])
-      )
-    );
+//     return results.map((result) => result.rows[0]);
+//   } catch (error) {
+//     console.error("Error in addingOrderItems:", error);
+//     throw new Error(`Error adding order items: ${error.message}`);
+//   }
+// };
 
-    return results.map((result) => result.rows[0]);
-  } catch (error) {
-    console.error("Error in addingOrderItems:", error);
-    throw new Error(`Error adding order items: ${error.message}`);
-  }
-};
-
-module.exports = { getAllOrdersByID, addingNewOrder, addingOrderItems };
+module.exports = { getAllOrdersByID };
