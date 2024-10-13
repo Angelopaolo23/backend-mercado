@@ -6,6 +6,7 @@ const productSchemas = require("../schemas/productSchemas");
 
 router.get("", productController.all);
 router.get("/:category", productController.productsByCategories);
+router.get("/user/:id", productController.productsByUser);
 router.get("/:id", productController.one);
 router.post("", validation(productSchemas.product), productController.create);
 router.put("/:id", validation(productSchemas.update), productController.update);

@@ -2,6 +2,7 @@ const {
   getProducts,
   getProductById,
   getProductsByCategories,
+  getProductsByUser,
   createProduct,
   addCategory,
   updateProduct,
@@ -16,16 +17,18 @@ const all = async (req, res) => {
   try {
     const queryStrings = req.query;
     const products = await getProducts(queryStrings);
-    res.json(products);
+    res.status(200).json(products);
   } catch (error) {
+    console.error("Error al obtener todos los productos:", error);
     res.status(500).json({ error: error.message });
   }
 };
 const one = async (req, res) => {
   try {
     const product = await getProductById(req.params.id);
-    res.json(product);
+    res.status(200).json(product);
   } catch (error) {
+    console.error("Error al obtener el producto:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -34,9 +37,20 @@ const productsByCategories = async (req, res) => {
     let page = parseInt(req.query.page) || 1;
     if (page < 1) page = 1;
     const category = req.params.category;
-    const result = await getProductsByCategories(page, category);
-    res.json(result);
+    const products = await getProductsByCategories(page, category);
+    res.status(200).json(products);
   } catch (error) {
+    console.error("Error al obtener los productos por categoria:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+const productsByUser = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const userProducts = await getProductsByUser(user_id);
+    res.status(200).json(userProducts);
+  } catch (error) {
+    console.error("Error al obtener los productos del usuario:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -44,8 +58,9 @@ const create = async (req, res) => {
   try {
     const product = await createProduct(req.body);
     await addCategory(product.product_id, req.body.category);
-    res.json(product);
+    res.status(200).json(product);
   } catch (error) {
+    console.error("Error al crear el producto:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -54,16 +69,18 @@ const update = async (req, res) => {
     console.log();
     const product = await updateProduct(req.params.id, req.body);
     await updateCategory(req.params.id, req.body.category);
-    res.json(product);
+    res.status(200).json(product);
   } catch (error) {
+    console.error("Error al modificar la informacion del producto:", error);
     res.status(500).json({ error: error.message });
   }
 };
 const destroy = async (req, res) => {
   try {
     const product = await deleteProduct(req.params.id);
-    res.json(product);
+    res.status(200).json(product);
   } catch (error) {
+    console.error("Error al eliminar el producto:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -79,6 +96,7 @@ const rating = async (req, res) => {
       res.status(201).json(updatedRate);
     }
   } catch (error) {
+    console.error("Error al calificar el producto:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -91,4 +109,5 @@ module.exports = {
   destroy,
   rating,
   productsByCategories,
+  productsByUser,
 };

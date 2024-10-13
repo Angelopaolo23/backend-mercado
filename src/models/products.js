@@ -61,6 +61,35 @@ const getProductById = async (id) => {
     throw new Error(`Error fetching product: ${error.message}`);
   }
 };
+const getProductsByUser = async (user_id) => {
+  //si hago filtros para el orden debo pasar el order by a traves de parametros, incluyendo field y direction haciendo split
+  const field = "created_at";
+  const direction = "DESC";
+
+  try {
+    const query = `SELECT p.*, u.username AS artist, c.name AS category FROM products p INNER JOIN products_categories pc ON p.product_id = pc.product_id INNER JOIN categories c ON pc.category_id = c.category_id INNER JOIN users u ON p.seller_id = u.user_id WHERE u.user_id = $1 ORDER BY "${field}" ${direction}`;
+    const { rows: products } = await pool.query(query, [user_id]);
+
+    const countQuery = `
+      SELECT COUNT(*) 
+      FROM products p
+      WHERE p.seller_id = $1;
+    `;
+    const { rows: countResult } = await pool.query(countQuery, [user_id]);
+    const totalProducts = parseInt(countResult[0].count);
+
+    return {
+      products,
+      metadata: {
+        totalProducts,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getProductsByUser:", error);
+    throw new Error(`Error fetching user products: ${error.message}`);
+  }
+};
+
 const createProduct = async (product) => {
   const query =
     "INSERT INTO products (title, description, price, url_image, seller_id) VALUES ($1, $2, $3, $4, $5) RETURNING *";
@@ -175,6 +204,7 @@ module.exports = {
   getProducts,
   getProductById,
   getProductsByCategories,
+  getProductsByUser,
   createProduct,
   addCategory,
   updateProduct,
